@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Waitlist</title>
+    <!-- Tailwind CSS for rapid styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-white font-sans antialiased min-h-screen relative overflow-hidden flex items-center justify-center">
+
+    <!-- Ambient Background Glows -->
+    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-[128px] opacity-40 z-0 pointer-events-none"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-[128px] opacity-40 z-0 pointer-events-none"></div>
+
+    <!-- Main Content Container -->
+    <div class="relative z-10 p-4 w-full max-w-lg">
+        
+        <!-- Header Section -->
+        <div class="text-center space-y-4 mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+                skillex <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Gaming</span>
+            </h1>
+            <p class="text-gray-400 text-lg max-w-sm mx-auto">
+                where gamers get hired.
+            </p>
+        </div>
+
+        <!-- Live Counters -->
+        <div class="flex justify-center gap-12 mb-10">
+            <div class="text-center">
+                <div id="gamer-count" class="text-4xl font-black text-purple-400 animate-pulse transition-all duration-300 transform">--</div>
+                <div class="text-xs uppercase tracking-widest text-gray-400 mt-1 font-bold">Gamers Ready</div>
+            </div>
+            <div class="text-center">
+                <div id="company-count" class="text-4xl font-black text-blue-400 animate-pulse transition-all duration-300 transform">--</div>
+                <div class="text-xs uppercase tracking-widest text-gray-400 mt-1 font-bold">Companies Onboard</div>
+            </div>
+        </div>
+
+        <!-- Waitlist Card -->
+        <div class="bg-gray-900/60 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-2xl">
+            
+            <form id="waitlist-form" class="space-y-6">
+                <!-- Role Selection (Gamer vs Company) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-3">I am joining as a:</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        
+                        <!-- Gamer Option -->
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="role" value="gamer" class="peer sr-only" checked>
+                            <div class="p-5 rounded-2xl border-2 border-gray-700 bg-gray-800 peer-checked:border-purple-500 peer-checked:bg-purple-500/10 hover:border-gray-500 transition-all text-center flex flex-col items-center gap-3">
+                                <span class="text-3xl">🎮</span>
+                                <span class="font-semibold text-gray-200">Gamer</span>
+                            </div>
+                            <!-- Active Checkmark Indicator -->
+                            <div class="absolute top-2 right-2 hidden peer-checked:block text-purple-500">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </label>
+
+                        <!-- Company Option -->
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="role" value="company" class="peer sr-only">
+                            <div class="p-5 rounded-2xl border-2 border-gray-700 bg-gray-800 peer-checked:border-blue-500 peer-checked:bg-blue-500/10 hover:border-gray-500 transition-all text-center flex flex-col items-center gap-3">
+                                <span class="text-3xl">🏢</span>
+                                <span class="font-semibold text-gray-200">Company</span>
+                            </div>
+                            <!-- Active Checkmark Indicator -->
+                            <div class="absolute top-2 right-2 hidden peer-checked:block text-blue-500">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+
+                <!-- Email Input -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="you@example.com" 
+                        class="w-full px-4 py-3 bg-gray-950 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all text-white placeholder-gray-600">
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" 
+                    class="w-full py-4 px-6 rounded-xl font-bold text-white shadow-lg bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-400 hover:to-blue-500 focus:ring-4 focus:ring-purple-500/50 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+                    Secure Your Spot
+                </button>
+            </form>
+
+            <!-- Success Message (Hidden until form is submitted) -->
+            <div id="success-message" class="hidden text-center py-6 animate-fade-in">
+                <div class="text-5xl mb-4">🎉</div>
+                <h3 class="text-2xl font-bold text-white mb-2">You're on the list!</h3>
+                <p class="text-gray-400">Keep an eye on your inbox. We'll be in touch soon with updates.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Logic to handle form submission -->
+<!-- Logic to handle form submission -->
+<script>
+  const writeURL = "https://script.google.com/macros/s/AKfycbxAKOw7-hNCkDd9kyo-XuFci03pWCKJc91UW99j9uhkGDOe2Z_3tg_AdBeVAPysJtPJJw/exec";
+  const readURL  = "/.netlify/functions/getcount";
+
+  const gamerEl = document.getElementById("gamer-count");
+  const companyEl = document.getElementById("company-count");
+
+  // --- 1) LIVE COUNTER ---
+  window.addEventListener("DOMContentLoaded", () => {
+    let cachedData = localStorage.getItem("skillex-counts");
+
+    // A) Cache sofort rendern
+    if (cachedData) {
+      const data = JSON.parse(cachedData);
+      gamerEl.classList.remove("animate-pulse");
+      companyEl.classList.remove("animate-pulse");
+      gamerEl.innerText = data.gamers || 0;
+      companyEl.innerText = data.companies || 0;
+    }
+
+    // B) Frische Daten laden
+    fetch(`${readURL}?ts=${Date.now()}`, { cache: "no-store" })
+      .then((response) => response.json())
+      .then((data) => {
+        gamerEl.classList.remove("animate-pulse");
+        companyEl.classList.remove("animate-pulse");
+        gamerEl.innerText = data.gamers || 0;
+        companyEl.innerText = data.companies || 0;
+
+        localStorage.setItem(
+          "skillex-counts",
+          JSON.stringify({
+            gamers: data.gamers || 0,
+            companies: data.companies || 0,
+          })
+        );
+      })
+      .catch((error) => {
+         console.error("Error fetching live counts:", error);
+         gamerEl.classList.remove("animate-pulse");
+        companyEl.classList.remove("animate-pulse");
+        gamerEl.innerText = "ERR";
+        companyEl.innerText = "ERR";
+});
+  });
+
+  // --- 2) FORM SUBMISSION ---
+  const form = document.getElementById("waitlist-form");
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const originalBtnText = submitBtn.innerText;
+    submitBtn.innerText = "Securing spot...";
+    submitBtn.disabled = true;
+
+    const selectedRole = form.querySelector('input[name="role"]:checked').value;
+
+    fetch(writeURL, {
+      method: "POST",
+      body: new FormData(form),
+      mode: "no-cors",
+    })
+      .then(() => {
+        form.style.display = "none";
+        document.getElementById("success-message").classList.remove("hidden");
+
+        // +1 Effekt
+        const countElement = selectedRole === "gamer" ? gamerEl : companyEl;
+        const currentCount = parseInt(countElement.innerText, 10);
+
+        if (!isNaN(currentCount)) {
+          countElement.innerText = currentCount + 1;
+
+          countElement.classList.add("scale-125", "text-green-400");
+          setTimeout(() => {
+            countElement.classList.remove("scale-125", "text-green-400");
+          }, 500);
+
+          localStorage.setItem(
+            "skillex-counts",
+            JSON.stringify({
+              gamers: parseInt(gamerEl.innerText, 10) || 0,
+              companies: parseInt(companyEl.innerText, 10) || 0,
+            })
+          );
+        }
+
+        // 🔥 echter Refresh (um echte Zahlen zu sehen)
+        setTimeout(() => {
+          fetch(`/.netlify/functions/getcount?ts=${Date.now()}`)
+            .then((r) => r.json())
+            .then((data) => {
+              gamerEl.innerText = data.gamers || 0;
+              companyEl.innerText = data.companies || 0;
+
+              localStorage.setItem(
+                "skillex-counts",
+                JSON.stringify({
+                  gamers: data.gamers || 0,
+                  companies: data.companies || 0,
+                })
+              );
+            })
+            .catch(() => {});
+        }, 1500);
+      })
+      .catch((error) => {
+        console.error("Error!", error.message);
+        alert("Something went wrong. Please try again.");
+        submitBtn.innerText = originalBtnText;
+        submitBtn.disabled = false;
+      });
+  });
+</script>
+
+    <style>
+        /* Small custom animation class */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</body>
+</html>
