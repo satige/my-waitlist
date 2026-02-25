@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skillex Gaming — Where Gaming Meets Career</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0b0d14;
+      --surface:   #111420;
+      --surface2:  #161925;
+      --border:    rgba(255,255,255,0.06);
+      --border-hi: rgba(255,255,255,0.12);
+      --text:      #eceef5;
+      --muted:     #525870;
+      --subtle:    #8b90a8;
+      --green:     #22c55e;
+      --green-dim: rgba(34,197,94,0.1);
+      --indigo:    #6366f1;
+      --indigo-dim:rgba(99,102,241,0.1);
+      --indigo-glow:rgba(99,102,241,0.2);
+      --white:     #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Subtle radial glow center */
+    body::before {
+      content: '';
+      position: fixed;
+      width: 900px; height: 600px;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse, rgba(99,102,241,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page { position: relative; z-index: 1; }
+
+    /* ──────────────────────────────
+       NAV
+    ────────────────────────────── */
+    nav {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .nav-logo span {
+      color: var(--indigo);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .nav-pill.gamer {
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid rgba(34,197,94,0.15);
+    }
+    .nav-pill.company {
+      background: var(--indigo-dim);
+      color: var(--indigo);
+      border: 1px solid rgba(99,102,241,0.2);
+    }
+    .nav-pill::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.8;
+    }
+
+    /* ──────────────────────────────
+       HERO
+    ────────────────────────────── */
+    .hero {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 5rem 2rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 5rem;
+      align-items: center;
+    }
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 3.5rem;
+        padding: 3.5rem 1.5rem 3rem;
+      }
+    }
+
+    /* Left col */
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.5s 0s ease forwards;
+    }
+    .eyebrow-line {
+      width: 24px; height: 1px;
+      background: var(--indigo);
+      opacity: 0.6;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.08s ease forwards;
+    }
+    h1 .line-muted { color: var(--muted); }
+    h1 .highlight {
+      color: var(--white);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-body {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--subtle);
+      max-width: 440px;
+      font-weight: 400;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.16s ease forwards;
+    }
+
+    /* Dual audience trust line */
+    .audience-tags {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.24s ease forwards;
+    }
+    .aud-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .aud-tag.g {
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid rgba(34,197,94,0.15);
+    }
+    .aud-tag.c {
+      background: var(--indigo-dim);
+      color: var(--indigo);
+      border: 1px solid rgba(99,102,241,0.2);
+    }
+    .aud-divider {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* Counters */
+    .stats-row {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.5s 0.32s ease forwards;
+    }
+    .stat {}
+    .stat-n {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .stat-n.g { color: var(--green); }
+    .stat-n.i { color: var(--indigo); }
+    .stat-n.loading { color: var(--muted); animation: pulse 1.5s ease infinite; }
+    .stat-l {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.3rem;
+    }
+    @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
+
+    /* ── FORM CARD ── */
+    .form-wrap {
+      opacity: 0;
+      animation: fadeUp 0.55s 0.12s ease forwards;
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border-hi);
+      border-radius: 18px;
+      padding: 2rem;
+      position: relative;
+    }
+    /* Top shimmer line */
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(99,102,241,0.5), transparent);
+      border-radius: 1px;
+    }
+
+    .form-heading {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+    }
+    .form-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.5;
+    }
+
+    /* Role toggle */
+    .role-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      background: var(--surface2);
+      padding: 0.3rem;
+      border-radius: 10px;
+    }
+    .role-toggle input[type="radio"] { display: none; }
+    .role-toggle label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.6rem;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .role-toggle .opt-g input:checked + label {
+      background: var(--surface);
+      color: var(--green);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.3);
+    }
+    .role-toggle .opt-c input:checked + label {
+      background: var(--surface);
+      color: var(--indigo);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.3);
+    }
+    .role-toggle label:hover { color: var(--text); }
+
+    /* Fields */
+    .field { margin-bottom: 0.875rem; }
+    .field.hidden { display: none; }
+    .field label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .opt-label { opacity: 0.55; text-transform: none; letter-spacing: 0; font-size: 0.85em; }
+    .field input {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .field input::placeholder { color: var(--muted); opacity: 0.5; }
+    .field input:focus {
+      border-color: rgba(99,102,241,0.4);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.08);
+    }
+
+    /* Submit */
+    .submit-btn {
+      width: 100%;
+      padding: 0.85rem;
+      margin-top: 0.25rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--indigo);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+      position: relative;
+    }
+    .submit-btn:hover:not(:disabled) {
+      background: #7477f3;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px var(--indigo-glow);
+    }
+    .submit-btn:active:not(:disabled) { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* Privacy note */
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 0.9rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+    .privacy-note svg { opacity: 0.5; flex-shrink: 0; }
+
+    /* Error */
+    .error-banner {
+      display: none;
+      background: rgba(239,68,68,0.07);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 6px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.78rem;
+      color: #f87171;
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+    .error-banner.show { display: block; }
+
+    /* Success */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 1.75rem 0;
+    }
+    .success.show { display: block; animation: fadeUp 0.4s ease both; }
+    .success-icon {
+      width: 52px; height: 52px;
+      background: var(--green-dim);
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin: 0 auto 1.1rem;
+    }
+    .success h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+    .success p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+
+    /* ──────────────────────────────
+       MARQUEE
+    ────────────────────────────── */
+    .marquee-wrap {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 2rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .marquee-item::after {
+      content: '';
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--border-hi);
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ──────────────────────────────
+       VALUE SECTION (minimal)
+    ────────────────────────────── */
+    .value {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+    @media (max-width: 768px) { .value { padding: 4rem 1.5rem; } }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 640px) { .value-grid { grid-template-columns: 1fr; } }
+
+    .value-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      transition: border-color 0.2s;
+    }
+    .value-card:hover { border-color: var(--border-hi); }
+
+    .value-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 100px;
+      margin-bottom: 1.25rem;
+    }
+    .value-tag.g { background: var(--green-dim); color: var(--green); }
+    .value-tag.c { background: var(--indigo-dim); color: var(--indigo); }
+
+    .value-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+    .value-desc {
+      font-size: 0.84rem;
+      line-height: 1.7;
+      color: var(--subtle);
+      font-weight: 400;
+    }
+    .value-list {
+      list-style: none;
+      margin-top: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .value-list li {
+      font-size: 0.82rem;
+      color: var(--subtle);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      line-height: 1.5;
+    }
+    .value-list li::before {
+      content: '→';
+      font-size: 0.75rem;
+      opacity: 0.4;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    /* ──────────────────────────────
+       FOOTER
+    ────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .footer-logo { font-weight: 700; font-size: 0.88rem; color: var(--subtle); }
+    .footer-logo span { color: var(--indigo); }
+
+    /* ──────────────────────────────
+       UTILS
+    ────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .bump { animation: bump 0.3s ease; }
+    @keyframes bump {
+      0%  { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100%{ transform: scale(1); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">skillex <span>Gaming</span></div>
+    <div class="nav-right">
+      <div class="nav-pill gamer">For Gamers</div>
+      <div class="nav-pill company">For Companies</div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <!-- Left -->
+    <div>
+      <div class="hero-eyebrow">
+        <span class="eyebrow-line"></span>
+        Now in early access
+      </div>
+
+      <h1>
+        <span class="line-muted">The network where</span><br>
+        <span class="highlight">gaming meets</span><br>
+        <span class="highlight">career.</span>
+      </h1>
+
+      <p class="hero-body">
+        skillex connects Gen Z gamers with forward-thinking companies — based on real skills, not a CV. Whether you play or hire, this is where you belong.
+      </p>
+
+      <div class="audience-tags">
+        <div class="aud-tag g">🎮 For Gamers</div>
+        <div class="aud-divider">and</div>
+        <div class="aud-tag c">🏢 For Companies</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <div id="gamer-count" class="stat-n g loading">--</div>
+          <div class="stat-l">Gamers Ready</div>
+        </div>
+        <div class="stat">
+          <div id="company-count" class="stat-n i loading">--</div>
+          <div class="stat-l">Companies Onboard</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="form-wrap">
+      <div class="form-card">
+        <div class="form-heading">Join the waitlist</div>
+        <div class="form-desc">Free for early members. Be first when we launch.</div>
+
+        <form id="waitlist-form">
+          <div class="role-toggle">
+            <div class="opt-g">
+              <input type="radio" name="role" id="role-gamer" value="gamer" checked>
+              <label for="role-gamer">🎮 Gamer</label>
+            </div>
+            <div class="opt-c">
+              <input type="radio" name="role" id="role-company" value="company">
+              <label for="role-company">🏢 Company</label>
+            </div>
+          </div>
+
+          <div class="field" id="field-game">
+            <label for="game">Main Game <span class="opt-label">(optional)</span></label>
+            <input type="text" id="game" name="game" placeholder="e.g. Valorant, CS2, FIFA" autocomplete="off">
+          </div>
+
+          <div class="field hidden" id="field-industry">
+            <label for="industry">Industry <span class="opt-label">(optional)</span></label>
+            <input type="text" id="industry" name="industry" placeholder="e.g. Esports, Tech, Media" autocomplete="off">
+          </div>
+
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+
+          <button type="submit" class="submit-btn" id="submit-btn">Join the Waitlist →</button>
+          <div class="error-banner" id="error-banner">Something went wrong — please try again.</div>
+        </form>
+
+        <div class="success" id="success-msg">
+          <div class="success-icon">✓</div>
+          <h3>You're on the list!</h3>
+          <p>We'll reach out soon with early access details.<br>Tell a friend — the more the merrier.</p>
+        </div>
+
+        <div class="privacy-note">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          No spam, ever. Unsubscribe anytime.
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-item">Valorant</div>
+      <div class="marquee-item">CS2</div>
+      <div class="marquee-item">League of Legends</div>
+      <div class="marquee-item">Rocket League</div>
+      <div class="marquee-item">FIFA / EA FC</div>
+      <div class="marquee-item">Apex Legends</div>
+      <div class="marquee-item">Fortnite</div>
+      <div class="marquee-item">Esports Orgs</div>
+      <div class="marquee-item">Gaming Studios</div>
+      <div class="marquee-item">Tech Companies</div>
+      <div class="marquee-item">Streaming Platforms</div>
+      <div class="marquee-item">Hardware Brands</div>
+      <!-- duplicate -->
+      <div class="marquee-item">Valorant</div>
+      <div class="marquee-item">CS2</div>
+      <div class="marquee-item">League of Legends</div>
+      <div class="marquee-item">Rocket League</div>
+      <div class="marquee-item">FIFA / EA FC</div>
+      <div class="marquee-item">Apex Legends</div>
+      <div class="marquee-item">Fortnite</div>
+      <div class="marquee-item">Esports Orgs</div>
+      <div class="marquee-item">Gaming Studios</div>
+      <div class="marquee-item">Tech Companies</div>
+      <div class="marquee-item">Streaming Platforms</div>
+      <div class="marquee-item">Hardware Brands</div>
+    </div>
+  </div>
+
+  <!-- VALUE SECTION -->
+  <section class="value">
+    <div class="value-grid">
+
+      <div class="value-card reveal">
+        <div class="value-tag g">🎮 For Gamers</div>
+        <div class="value-title">Your skills finally<br>count on paper.</div>
+        <p class="value-desc">Stop hiding your 2,000 hours in Valorant. We translate what you've mastered in-game into skills employers actually want.</p>
+        <ul class="value-list">
+          <li>Skill-first profile — no CV required</li>
+          <li>Verified stats from your gaming accounts</li>
+          <li>Get discovered by companies that get you</li>
+        </ul>
+      </div>
+
+      <div class="value-card reveal reveal-d1">
+        <div class="value-tag c">🏢 For Companies</div>
+        <div class="value-title">Hire the next<br>generation, first.</div>
+        <p class="value-desc">Gen Z thinks differently, adapts fast, and thrives under pressure. Find them before your competitors do.</p>
+        <ul class="value-list">
+          <li>Access a talent pool that doesn't apply elsewhere</li>
+          <li>Filter by playstyle, game, and real competencies</li>
+          <li>Direct contact — no recruiter in the middle</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-logo">skillex <span>Gaming</span></div>
+    <div>where gaming meets career.</div>
+    <div>© 2025 skillex Gaming</div>
+  </footer>
+
+</div>
+
+<script>
+  // ─────────────────────────────────────────────
+  const WRITE_URL = "https://script.google.com/macros/s/AKfycbxqjS4-4I2ZPFERjf8xdHV_THsTE_qa1ZoAHVbjhm699C1H1fr5TYUyb8iPlbzYDDZRfw/exec";
+  const READ_URL  = "/.netlify/functions/getcount";
+  // ─────────────────────────────────────────────
+
+  const gamerEl     = document.getElementById("gamer-count");
+  const companyEl   = document.getElementById("company-count");
+  const form        = document.getElementById("waitlist-form");
+  const submitBtn   = document.getElementById("submit-btn");
+  const errorBanner = document.getElementById("error-banner");
+
+  // Counters
+  async function loadCounts() {
+    try {
+      const cached = JSON.parse(localStorage.getItem("skillex-counts") || "null");
+      if (cached) setCounters(cached.gamers, cached.companies, false);
+    } catch (_) {}
+    try {
+      const res  = await fetch(`${READ_URL}?t=${Date.now()}`, { cache: "no-store" });
+      const data = await res.json();
+      setCounters(data.gamers || 0, data.companies || 0, true);
+      localStorage.setItem("skillex-counts", JSON.stringify({ gamers: data.gamers || 0, companies: data.companies || 0 }));
+    } catch (_) {
+      gamerEl.classList.remove("loading"); gamerEl.textContent = "?";
+      companyEl.classList.remove("loading"); companyEl.textContent = "?";
+    }
+  }
+  function setCounters(g, c, animated) {
+    gamerEl.classList.remove("loading");   gamerEl.textContent   = g;
+    companyEl.classList.remove("loading"); companyEl.textContent = c;
+    if (animated) {
+      [gamerEl, companyEl].forEach(el => {
+        el.classList.add("bump");
+        setTimeout(() => el.classList.remove("bump"), 300);
+      });
+    }
+  }
+  loadCounts();
+
+  // Role toggle
+  const gameWrap      = document.getElementById("field-game");
+  const industryWrap  = document.getElementById("field-industry");
+  const gameInput     = document.getElementById("game");
+  const industryInput = document.getElementById("industry");
+  function updateRole() {
+    const role = form.querySelector('input[name="role"]:checked').value;
+    if (role === "gamer") {
+      gameWrap.classList.remove("hidden");
+      industryWrap.classList.add("hidden");
+      industryInput.value = "";
+    } else {
+      industryWrap.classList.remove("hidden");
+      gameWrap.classList.add("hidden");
+      gameInput.value = "";
+    }
+  }
+  updateRole();
+  form.querySelectorAll('input[name="role"]').forEach(r => r.addEventListener("change", updateRole));
+
+  // Submit
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    errorBanner.classList.remove("show");
+    const role     = form.querySelector('input[name="role"]:checked').value;
+    const email    = document.getElementById("email").value.trim();
+    const game     = role === "gamer"   ? gameInput.value.trim()     : "";
+    const industry = role === "company" ? industryInput.value.trim() : "";
+    if (!email) return;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Joining…";
+    const params = new URLSearchParams({ action: "write", role, email, game, industry });
+    try {
+      await fetch(`${WRITE_URL}?${params.toString()}`, { method: "GET", mode: "no-cors" });
+      form.style.display = "none";
+      document.getElementById("success-msg").classList.add("show");
+      const el = role === "gamer" ? gamerEl : companyEl;
+      const n  = parseInt(el.textContent, 10);
+      if (!isNaN(n)) {
+        el.textContent = n + 1;
+        el.classList.add("bump");
+        setTimeout(() => el.classList.remove("bump"), 300);
+        try { localStorage.setItem("skillex-counts", JSON.stringify({ gamers: parseInt(gamerEl.textContent,10)||0, companies: parseInt(companyEl.textContent,10)||0 })); } catch(_){}
+      }
+    } catch (err) {
+      console.error(err);
+      errorBanner.classList.add("show");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Join the Waitlist →";
+    }
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
