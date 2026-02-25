@@ -213,83 +213,57 @@
       r.addEventListener("change", updateRoleFields);
     });
 
-    // --- 3) SUBMIT ---
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+    // --- 3) SUBMIT (JSON, zuverlässig für game/industry) ---
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
 
-      const originalBtnText = submitBtn.innerText;
-      submitBtn.innerText = "Securing spot...";
-      submitBtn.disabled = true;
+  const originalBtnText = submitBtn.innerText;
+  submitBtn.innerText = "Securing spot...";
+  submitBtn.disabled = true;
 
-      const selectedRole = form.querySelector('input[name="role"]:checked').value;
+  const role = form.querySelector('input[name="role"]:checked').value;
+  const email = document.getElementById("email").value.trim();
 
-      // FormData -> URLSearchParams (x-www-form-urlencoded)
-      const fd = new FormData(form);
+  // direkt aus den Inputs lesen (sichtbares Feld)
+  const game = role === "gamer" ? document.getElementById("game").value.trim() : "";
+  const industry = role === "company" ? document.getElementById("industry").value.trim() : "";
 
-      // Safety: Nur das passende Feld mitsenden (optional, aber sauber)
-      if (selectedRole === "gamer") {
-        fd.set("industry", "");
-      } else {
-        fd.set("game", "");
+  const payload = { role, email, game, industry };
+
+  console.log("Submitting JSON:", payload);
+
+  fetch(writeURL, {
+    method: "POST",
+    mode: "no-cors",
+    // KEIN header -> kein CORS-preflight, Browser sendet text/plain
+    body: JSON.stringify(payload),
+  })
+    .then(() => {
+      form.style.display = "none";
+      document.getElementById("success-message").classList.remove("hidden");
+
+      // +1 Effekt
+      const countElement = role === "gamer" ? gamerEl : companyEl;
+      const currentCount = parseInt(countElement.innerText, 10);
+
+      if (!isNaN(currentCount)) {
+        countElement.innerText = currentCount + 1;
+        countElement.classList.add("scale-125", "text-green-400");
+        setTimeout(() => countElement.classList.remove("scale-125", "text-green-400"), 500);
+
+        localStorage.setItem("skillex-counts", JSON.stringify({
+          gamers: parseInt(gamerEl.innerText, 10) || 0,
+          companies: parseInt(companyEl.innerText, 10) || 0,
+        }));
       }
-
-      const params = new URLSearchParams(fd);
-
-      // Debug
-      console.log("Submitting:", Object.fromEntries(params.entries()));
-
-      fetch(writeURL, {
-  method: "POST",
-  mode: "no-cors",
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-  },
-  body: params.toString(),
-})
-        .then(() => {
-          form.style.display = "none";
-          document.getElementById("success-message").classList.remove("hidden");
-
-          // +1 Effekt
-          const countElement = selectedRole === "gamer" ? gamerEl : companyEl;
-          const currentCount = parseInt(countElement.innerText, 10);
-
-          if (!isNaN(currentCount)) {
-            countElement.innerText = currentCount + 1;
-
-            countElement.classList.add("scale-125", "text-green-400");
-            setTimeout(() => {
-              countElement.classList.remove("scale-125", "text-green-400");
-            }, 500);
-
-            localStorage.setItem("skillex-counts", JSON.stringify({
-              gamers: parseInt(gamerEl.innerText, 10) || 0,
-              companies: parseInt(companyEl.innerText, 10) || 0,
-            }));
-          }
-
-          setTimeout(() => {
-            fetch(`/.netlify/functions/getcount?ts=${Date.now()}`)
-              .then((r) => r.json())
-              .then((data) => {
-                gamerEl.innerText = data.gamers || 0;
-                companyEl.innerText = data.companies || 0;
-
-                localStorage.setItem("skillex-counts", JSON.stringify({
-                  gamers: data.gamers || 0,
-                  companies: data.companies || 0,
-                }));
-              })
-              .catch(() => {});
-          }, 1500);
-        })
-        .catch((error) => {
-          console.error("Error!", error.message);
-          alert("Something went wrong. Please try again.");
-          submitBtn.innerText = originalBtnText;
-          submitBtn.disabled = false;
-        });
+    })
+    .catch((error) => {
+      console.error("Error!", error.message);
+      alert("Something went wrong. Please try again.");
+      submitBtn.innerText = originalBtnText;
+      submitBtn.disabled = false;
     });
+});
   </script>
 
   <style>
