@@ -1,279 +1,479 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Join the Waitlist</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>skillex Gaming — Waitlist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple: #a855f7;
+      --blue: #3b82f6;
+      --bg: #07080f;
+      --card: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Ambient blobs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+    }
+    body::before {
+      width: 500px; height: 500px;
+      background: var(--purple);
+      top: -150px; left: -150px;
+    }
+    body::after {
+      width: 500px; height: 500px;
+      background: var(--blue);
+      bottom: -150px; right: -150px;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.8rem, 8vw, 4rem);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .logo span {
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .tagline {
+      margin-top: 0.6rem;
+      font-size: 1rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Counters ── */
+    .counters {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .counter-item { text-align: center; }
+    .counter-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2.6rem;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .counter-num.purple { color: var(--purple); }
+    .counter-num.blue   { color: var(--blue); }
+    .counter-num.loading {
+      opacity: 0.4;
+      animation: pulse 1.5s ease infinite;
+    }
+    .counter-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      font-weight: 500;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(20px);
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    /* ── Role Toggle ── */
+    .role-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .role-option input[type="radio"] { display: none; }
+    .role-option label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.1rem 0.5rem;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .role-option label .icon { font-size: 1.6rem; }
+    .role-option input:checked + label {
+      border-color: var(--purple);
+      background: rgba(168, 85, 247, 0.08);
+    }
+    .role-option.company input:checked + label {
+      border-color: var(--blue);
+      background: rgba(59, 130, 246, 0.08);
+    }
+    .role-option label:hover { border-color: rgba(255,255,255,0.2); }
+
+    /* ── Fields ── */
+    .field { margin-bottom: 1.25rem; }
+    .field.hidden { display: none; }
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+    .field input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(0,0,0,0.35);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input::placeholder { color: #3d3d50; }
+    .field input:focus { border-color: var(--purple); }
+    .field.email input:focus { border-color: var(--blue); }
+
+    /* ── Submit ── */
+    .submit-btn {
+      width: 100%;
+      padding: 0.95rem;
+      margin-top: 0.5rem;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .submit-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+    .submit-btn:active:not(:disabled) { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Success ── */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 1.5rem 0;
+      animation: fadeUp 0.5s ease both;
+    }
+    .success.show { display: block; }
+    .success .emoji { font-size: 3rem; margin-bottom: 1rem; display: block; }
+    .success h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+    .success p { color: var(--muted); font-size: 0.95rem; }
+
+    /* ── Error banner ── */
+    .error-banner {
+      display: none;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: #f87171;
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+    .error-banner.show { display: block; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 0.8; }
+    }
+    .bump {
+      animation: bump 0.4s ease;
+    }
+    @keyframes bump {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.15); color: #4ade80; }
+      100% { transform: scale(1); }
+    }
+  </style>
 </head>
+<body>
+<div class="wrap">
 
-<body class="bg-gray-950 text-white font-sans antialiased min-h-screen relative overflow-hidden flex items-center justify-center">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">skillex <span>Gaming</span></div>
+    <p class="tagline">where gamers get hired.</p>
+  </div>
 
-  <!-- Ambient Background Glows -->
-  <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-[128px] opacity-40 z-0 pointer-events-none"></div>
-  <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-[128px] opacity-40 z-0 pointer-events-none"></div>
-
-  <!-- Main Content Container -->
-  <div class="relative z-10 p-4 w-full max-w-lg">
-
-    <!-- Header Section -->
-    <div class="text-center space-y-4 mb-10">
-      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
-        skillex <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Gaming</span>
-      </h1>
-      <p class="text-gray-400 text-lg max-w-sm mx-auto">
-        where gamers get hired.
-      </p>
+  <!-- Counters -->
+  <div class="counters">
+    <div class="counter-item">
+      <div id="gamer-count" class="counter-num purple loading">--</div>
+      <div class="counter-label">Gamers Ready</div>
     </div>
-
-    <!-- Live Counters -->
-    <div class="flex justify-center gap-12 mb-10">
-      <div class="text-center">
-        <div id="gamer-count" class="text-4xl font-black text-purple-400 animate-pulse transition-all duration-300 transform">--</div>
-        <div class="text-xs uppercase tracking-widest text-gray-400 mt-1 font-bold">Gamers Ready</div>
-      </div>
-      <div class="text-center">
-        <div id="company-count" class="text-4xl font-black text-blue-400 animate-pulse transition-all duration-300 transform">--</div>
-        <div class="text-xs uppercase tracking-widest text-gray-400 mt-1 font-bold">Companies Onboard</div>
-      </div>
-    </div>
-
-    <!-- Waitlist Card -->
-    <div class="bg-gray-900/60 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-2xl">
-
-      <form id="waitlist-form" class="space-y-6">
-
-        <!-- Role Selection -->
-        <div>
-          <label class="block text-sm font-medium text-gray-300 mb-3">I am joining as a:</label>
-          <div class="grid grid-cols-2 gap-4">
-
-            <!-- Gamer -->
-            <label class="cursor-pointer relative">
-              <input type="radio" name="role" value="gamer" class="peer sr-only" checked />
-              <div class="p-5 rounded-2xl border-2 border-gray-700 bg-gray-800 peer-checked:border-purple-500 peer-checked:bg-purple-500/10 hover:border-gray-500 transition-all text-center flex flex-col items-center gap-3">
-                <span class="text-3xl">🎮</span>
-                <span class="font-semibold text-gray-200">Gamer</span>
-              </div>
-              <div class="absolute top-2 right-2 hidden peer-checked:block text-purple-500">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-              </div>
-            </label>
-
-            <!-- Company -->
-            <label class="cursor-pointer relative">
-              <input type="radio" name="role" value="company" class="peer sr-only" />
-              <div class="p-5 rounded-2xl border-2 border-gray-700 bg-gray-800 peer-checked:border-blue-500 peer-checked:bg-blue-500/10 hover:border-gray-500 transition-all text-center flex flex-col items-center gap-3">
-                <span class="text-3xl">🏢</span>
-                <span class="font-semibold text-gray-200">Company</span>
-              </div>
-              <div class="absolute top-2 right-2 hidden peer-checked:block text-blue-500">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-              </div>
-            </label>
-
-          </div>
-        </div>
-
-        <!-- Role-specific Fields -->
-        <div class="space-y-4">
-
-          <!-- Gamer: Game -->
-          <div id="field-game">
-            <label for="game" class="block text-sm font-medium text-gray-300 mb-2">Game</label>
-            <input
-              type="text"
-              id="game"
-              name="game"
-              placeholder="e.g. Valorant"
-              class="w-full px-4 py-3 bg-gray-950 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all text-white placeholder-gray-600"
-            />
-          </div>
-
-          <!-- Company: Industry -->
-          <div id="field-industry" class="hidden">
-            <label for="industry" class="block text-sm font-medium text-gray-300 mb-2">Industry</label>
-            <input
-              type="text"
-              id="industry"
-              name="industry"
-              placeholder="e.g. Esports hardware"
-              class="w-full px-4 py-3 bg-gray-950 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-white placeholder-gray-600"
-            />
-          </div>
-
-        </div>
-
-        <!-- Email -->
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            placeholder="you@example.com"
-            class="w-full px-4 py-3 bg-gray-950 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all text-white placeholder-gray-600"
-          />
-        </div>
-
-        <!-- Submit -->
-        <button
-          type="submit"
-          class="w-full py-4 px-6 rounded-xl font-bold text-white shadow-lg bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-400 hover:to-blue-500 focus:ring-4 focus:ring-purple-500/50 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
-        >
-          Secure Your Spot
-        </button>
-      </form>
-
-      <!-- Success Message -->
-      <div id="success-message" class="hidden text-center py-6 animate-fade-in">
-        <div class="text-5xl mb-4">🎉</div>
-        <h3 class="text-2xl font-bold text-white mb-2">You're on the list!</h3>
-        <p class="text-gray-400">Keep an eye on your inbox. We'll be in touch soon with updates.</p>
-      </div>
-
+    <div class="counter-item">
+      <div id="company-count" class="counter-num blue loading">--</div>
+      <div class="counter-label">Companies Onboard</div>
     </div>
   </div>
 
-  <script>
-    const writeURL = "https://script.google.com/macros/s/AKfycbxAKOw7-hNCkDd9kyo-XuFci03pWCKJc91UW99j9uhkGDOe2Z_3tg_AdBeVAPysJtPJJw/exec";
-    const readURL  = "/.netlify/functions/getcount";
+  <!-- Card -->
+  <div class="card">
 
-    const gamerEl = document.getElementById("gamer-count");
-    const companyEl = document.getElementById("company-count");
+    <!-- Form -->
+    <form id="waitlist-form">
 
-    // --- 1) LIVE COUNTER ---
-    window.addEventListener("DOMContentLoaded", () => {
-      const cachedData = localStorage.getItem("skillex-counts");
+      <span class="role-label">I am joining as a:</span>
+      <div class="role-grid">
+        <div class="role-option gamer">
+          <input type="radio" name="role" id="role-gamer" value="gamer" checked>
+          <label for="role-gamer">
+            <span class="icon">🎮</span> Gamer
+          </label>
+        </div>
+        <div class="role-option company">
+          <input type="radio" name="role" id="role-company" value="company">
+          <label for="role-company">
+            <span class="icon">🏢</span> Company
+          </label>
+        </div>
+      </div>
 
-      if (cachedData) {
-        const data = JSON.parse(cachedData);
-        gamerEl.classList.remove("animate-pulse");
-        companyEl.classList.remove("animate-pulse");
-        gamerEl.innerText = data.gamers || 0;
-        companyEl.innerText = data.companies || 0;
-      }
+      <div class="field" id="field-game">
+        <label for="game">Main Game <span style="color:var(--muted);font-size:0.75em;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <input type="text" id="game" name="game" placeholder="e.g. Valorant" autocomplete="off">
+      </div>
 
-      fetch(`${readURL}?ts=${Date.now()}`, { cache: "no-store" })
-        .then((response) => response.json())
-        .then((data) => {
-          gamerEl.classList.remove("animate-pulse");
-          companyEl.classList.remove("animate-pulse");
-          gamerEl.innerText = data.gamers || 0;
-          companyEl.innerText = data.companies || 0;
+      <div class="field hidden" id="field-industry">
+        <label for="industry">Industry <span style="color:var(--muted);font-size:0.75em;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <input type="text" id="industry" name="industry" placeholder="e.g. Esports Hardware" autocomplete="off">
+      </div>
 
-          localStorage.setItem("skillex-counts", JSON.stringify({
-            gamers: data.gamers || 0,
-            companies: data.companies || 0,
-          }));
-        })
-        .catch((error) => {
-          console.error("Error fetching live counts:", error);
-          gamerEl.classList.remove("animate-pulse");
-          companyEl.classList.remove("animate-pulse");
-          gamerEl.innerText = "ERR";
-          companyEl.innerText = "ERR";
-        });
-    });
+      <div class="field email">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
 
-    // --- 2) FORM + ROLE TOGGLE ---
-    const form = document.getElementById("waitlist-form");
-    const submitBtn = form.querySelector('button[type="submit"]');
+      <button type="submit" class="submit-btn" id="submit-btn">Secure Your Spot →</button>
+      <div class="error-banner" id="error-banner">Something went wrong — please try again.</div>
+    </form>
 
-    const gameWrap = document.getElementById("field-game");
-    const industryWrap = document.getElementById("field-industry");
-    const gameInput = document.getElementById("game");
-    const industryInput = document.getElementById("industry");
+    <!-- Success -->
+    <div class="success" id="success-msg">
+      <span class="emoji">🎉</span>
+      <h3>You're on the list!</h3>
+      <p>Keep an eye on your inbox. We'll be in touch soon.</p>
+    </div>
 
-    function updateRoleFields() {
-      const role = form.querySelector('input[name="role"]:checked')?.value;
+  </div>
+</div>
 
-      if (role === "gamer") {
-        gameWrap.classList.remove("hidden");
-        industryWrap.classList.add("hidden");
-        gameInput.required = true;
-        industryInput.required = false;
-        industryInput.value = "";
-      } else {
-        industryWrap.classList.remove("hidden");
-        gameWrap.classList.add("hidden");
-        industryInput.required = true;
-        gameInput.required = false;
-        gameInput.value = "";
-      }
+<script>
+  // ─────────────────────────────────────────────
+  // ⚙️  CONFIG — trage deine URLs hier ein
+  // ─────────────────────────────────────────────
+  const WRITE_URL = "DEINE_APPS_SCRIPT_URL_HIER";   // z.B. https://script.google.com/macros/s/.../exec
+  const READ_URL  = "/.netlify/functions/getcount"; // Netlify Function URL
+  // ─────────────────────────────────────────────
+
+  const gamerEl   = document.getElementById("gamer-count");
+  const companyEl = document.getElementById("company-count");
+  const form      = document.getElementById("waitlist-form");
+  const submitBtn = document.getElementById("submit-btn");
+  const errorBanner = document.getElementById("error-banner");
+
+  // ── Load counters ──────────────────────────────
+  async function loadCounts() {
+    // Show cached instantly
+    try {
+      const cached = JSON.parse(localStorage.getItem("skillex-counts") || "null");
+      if (cached) setCounters(cached.gamers, cached.companies, false);
+    } catch (_) {}
+
+    try {
+      const res  = await fetch(`${READ_URL}?t=${Date.now()}`, { cache: "no-store" });
+      const data = await res.json();
+      setCounters(data.gamers || 0, data.companies || 0, true);
+      localStorage.setItem("skillex-counts", JSON.stringify({
+        gamers:    data.gamers    || 0,
+        companies: data.companies || 0,
+      }));
+    } catch (err) {
+      console.warn("Could not load counts:", err);
+      gamerEl.classList.remove("loading");
+      companyEl.classList.remove("loading");
+      gamerEl.textContent   = "?";
+      companyEl.textContent = "?";
     }
+  }
 
-    updateRoleFields();
-    form.querySelectorAll('input[name="role"]').forEach((r) => {
-      r.addEventListener("change", updateRoleFields);
-    });
+  function setCounters(gamers, companies, animated) {
+    gamerEl.classList.remove("loading");
+    companyEl.classList.remove("loading");
+    gamerEl.textContent   = gamers;
+    companyEl.textContent = companies;
+    if (animated) {
+      gamerEl.classList.add("bump");
+      companyEl.classList.add("bump");
+      setTimeout(() => {
+        gamerEl.classList.remove("bump");
+        companyEl.classList.remove("bump");
+      }, 400);
+    }
+  }
 
-    // --- 3) SUBMIT (JSON, zuverlässig für game/industry) ---
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
+  loadCounts();
 
-  const originalBtnText = submitBtn.innerText;
-  submitBtn.innerText = "Securing spot...";
-  submitBtn.disabled = true;
+  // ── Role toggle ────────────────────────────────
+  const gameWrap     = document.getElementById("field-game");
+  const industryWrap = document.getElementById("field-industry");
+  const gameInput    = document.getElementById("game");
+  const industryInput = document.getElementById("industry");
 
-  const role = form.querySelector('input[name="role"]:checked').value;
-  const email = document.getElementById("email").value.trim();
+  function updateRole() {
+    const role = form.querySelector('input[name="role"]:checked').value;
+    if (role === "gamer") {
+      gameWrap.classList.remove("hidden");
+      industryWrap.classList.add("hidden");
+      gameInput.required     = false;
+      industryInput.required = false;
+      industryInput.value    = "";
+    } else {
+      industryWrap.classList.remove("hidden");
+      gameWrap.classList.add("hidden");
+      industryInput.required = false;
+      gameInput.required     = false;
+      gameInput.value        = "";
+    }
+  }
 
-  // direkt aus den Inputs lesen (sichtbares Feld)
-  const game = role === "gamer" ? document.getElementById("game").value.trim() : "";
-  const industry = role === "company" ? document.getElementById("industry").value.trim() : "";
+  updateRole();
+  form.querySelectorAll('input[name="role"]').forEach(r => r.addEventListener("change", updateRole));
 
-  const payload = { role, email, game, industry };
+  // ── Submit ─────────────────────────────────────
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    errorBanner.classList.remove("show");
 
-  console.log("Submitting JSON:", payload);
+    const role     = form.querySelector('input[name="role"]:checked').value;
+    const email    = document.getElementById("email").value.trim();
+    const game     = role === "gamer"   ? gameInput.value.trim()     : "";
+    const industry = role === "company" ? industryInput.value.trim() : "";
 
-  fetch(writeURL, {
-    method: "POST",
-    mode: "no-cors",
-    // KEIN header -> kein CORS-preflight, Browser sendet text/plain
-    body: JSON.stringify(payload),
-  })
-    .then(() => {
+    if (!email) return;
+
+    submitBtn.disabled    = true;
+    submitBtn.textContent = "Securing…";
+
+    const payload = JSON.stringify({ role, email, game, industry });
+
+    try {
+      // no-cors: We can't read the response, but the data arrives in the sheet.
+      await fetch(WRITE_URL, {
+        method:  "POST",
+        mode:    "no-cors",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body:    payload,
+      });
+
+      // Optimistically show success & bump counter
       form.style.display = "none";
-      document.getElementById("success-message").classList.remove("hidden");
+      document.getElementById("success-msg").classList.add("show");
 
-      // +1 Effekt
-      const countElement = role === "gamer" ? gamerEl : companyEl;
-      const currentCount = parseInt(countElement.innerText, 10);
-
-      if (!isNaN(currentCount)) {
-        countElement.innerText = currentCount + 1;
-        countElement.classList.add("scale-125", "text-green-400");
-        setTimeout(() => countElement.classList.remove("scale-125", "text-green-400"), 500);
-
-        localStorage.setItem("skillex-counts", JSON.stringify({
-          gamers: parseInt(gamerEl.innerText, 10) || 0,
-          companies: parseInt(companyEl.innerText, 10) || 0,
-        }));
+      const el = role === "gamer" ? gamerEl : companyEl;
+      const n  = parseInt(el.textContent, 10);
+      if (!isNaN(n)) {
+        el.textContent = n + 1;
+        el.classList.add("bump");
+        setTimeout(() => el.classList.remove("bump"), 400);
+        try {
+          localStorage.setItem("skillex-counts", JSON.stringify({
+            gamers:    parseInt(gamerEl.textContent, 10)   || 0,
+            companies: parseInt(companyEl.textContent, 10) || 0,
+          }));
+        } catch (_) {}
       }
-    })
-    .catch((error) => {
-      console.error("Error!", error.message);
-      alert("Something went wrong. Please try again.");
-      submitBtn.innerText = originalBtnText;
-      submitBtn.disabled = false;
-    });
-});
-  </script>
-
-  <style>
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    } catch (err) {
+      console.error(err);
+      errorBanner.classList.add("show");
+      submitBtn.disabled    = false;
+      submitBtn.textContent = "Secure Your Spot →";
     }
-    .animate-fade-in {
-      animation: fadeIn 0.5s ease-out forwards;
-    }
-  </style>
+  });
+</script>
 </body>
 </html>
