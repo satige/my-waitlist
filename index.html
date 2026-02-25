@@ -75,7 +75,34 @@
 
                     </div>
                 </div>
+                <!-- Role-specific Fields -->
+<div class="space-y-4">
 
+  <!-- Gamer: Game -->
+  <div id="field-game">
+    <label for="game" class="block text-sm font-medium text-gray-300 mb-2">Game</label>
+    <input
+      type="text"
+      id="game"
+      name="game"
+      placeholder="e.g. Valorant"
+      class="w-full px-4 py-3 bg-gray-950 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all text-white placeholder-gray-600"
+    />
+  </div>
+
+  <!-- Company: Industry -->
+  <div id="field-industry" class="hidden">
+    <label for="industry" class="block text-sm font-medium text-gray-300 mb-2">Industry</label>
+    <input
+      type="text"
+      id="industry"
+      name="industry"
+      placeholder="e.g. Esports hardware"
+      class="w-full px-4 py-3 bg-gray-950 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-white placeholder-gray-600"
+    />
+  </div>
+
+</div>
                 <!-- Email Input -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
@@ -102,6 +129,7 @@
 
     <!-- Logic to handle form submission -->
 <!-- Logic to handle form submission -->
+
 <script>
   const writeURL = "https://script.google.com/macros/s/AKfycbxAKOw7-hNCkDd9kyo-XuFci03pWCKJc91UW99j9uhkGDOe2Z_3tg_AdBeVAPysJtPJJw/exec";
   const readURL  = "/.netlify/functions/getcount";
@@ -113,7 +141,6 @@
   window.addEventListener("DOMContentLoaded", () => {
     let cachedData = localStorage.getItem("skillex-counts");
 
-    // A) Cache sofort rendern
     if (cachedData) {
       const data = JSON.parse(cachedData);
       gamerEl.classList.remove("animate-pulse");
@@ -122,7 +149,6 @@
       companyEl.innerText = data.companies || 0;
     }
 
-    // B) Frische Daten laden
     fetch(`${readURL}?ts=${Date.now()}`, { cache: "no-store" })
       .then((response) => response.json())
       .then((data) => {
@@ -140,18 +166,47 @@
         );
       })
       .catch((error) => {
-         console.error("Error fetching live counts:", error);
-         gamerEl.classList.remove("animate-pulse");
+        console.error("Error fetching live counts:", error);
+        gamerEl.classList.remove("animate-pulse");
         companyEl.classList.remove("animate-pulse");
         gamerEl.innerText = "ERR";
         companyEl.innerText = "ERR";
-});
+      });
   });
 
-  // --- 2) FORM SUBMISSION ---
+  // --- 2) FORM + ROLE TOGGLE ---
   const form = document.getElementById("waitlist-form");
   const submitBtn = form.querySelector('button[type="submit"]');
 
+  const gameWrap = document.getElementById("field-game");
+  const industryWrap = document.getElementById("field-industry");
+  const gameInput = document.getElementById("game");
+  const industryInput = document.getElementById("industry");
+
+  function updateRoleFields() {
+    const role = form.querySelector('input[name="role"]:checked')?.value;
+
+    if (role === "gamer") {
+      gameWrap.classList.remove("hidden");
+      industryWrap.classList.add("hidden");
+      gameInput.required = true;
+      industryInput.required = false;
+      industryInput.value = "";
+    } else {
+      industryWrap.classList.remove("hidden");
+      gameWrap.classList.add("hidden");
+      industryInput.required = true;
+      gameInput.required = false;
+      gameInput.value = "";
+    }
+  }
+
+  updateRoleFields();
+  form.querySelectorAll('input[name="role"]').forEach((r) => {
+    r.addEventListener("change", updateRoleFields);
+  });
+
+  // --- 3) SUBMIT ---
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -191,7 +246,6 @@
           );
         }
 
-        // 🔥 echter Refresh (um echte Zahlen zu sehen)
         setTimeout(() => {
           fetch(`/.netlify/functions/getcount?ts=${Date.now()}`)
             .then((r) => r.json())
