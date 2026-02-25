@@ -216,19 +216,18 @@
 
     const selectedRole = form.querySelector('input[name="role"]:checked').value;
 
-    const fd = new FormData(form);
-const params = new URLSearchParams();
-for (const [key, value] of fd.entries()) {
-  params.append(key, value);
-}
+const params = new URLSearchParams(new FormData(form));
+
+// Debug: check in DevTools Console ob game/industry mitgeschickt wird
+console.log("Submitting:", Object.fromEntries(params.entries()));
 
 fetch(writeURL, {
   method: "POST",
-  body: params,
   mode: "no-cors",
   headers: {
-    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    "Content-Type": "application/x-www-form-urlencoded",
   },
+  body: params.toString(),
 })
       .then(() => {
         form.style.display = "none";
